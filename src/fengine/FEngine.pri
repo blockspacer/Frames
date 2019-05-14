@@ -1,8 +1,10 @@
 SOURCES += \
-    $$PWD/fengine.cpp
+    $$PWD/engine.cpp \
+    $$PWD/utils/timing.cpp
 
 HEADERS += \
-    $$PWD/fengine.h
+    $$PWD/engine.h \
+    $$PWD/utils/timing.h
 
 ################################################################################
 # Libraries includes

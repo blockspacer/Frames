@@ -3,12 +3,15 @@
 #include "libs/easylogging++/easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
 
-#include "fengine.h"
-
 #include <imgui/imgui.h>
 #include <imgui/imgui_SFML.h>
 
-void FEngine::init(std::string title, unsigned int width, unsigned int height)
+#include "engine.h"
+#include "utils/timing.h"
+
+namespace Frames {
+
+void Engine::init(std::string title, unsigned int width, unsigned int height)
 {
     el::Loggers::reconfigureAllLoggers(el::ConfigurationType::Format, "[%levshort] %msg");
 
@@ -22,7 +25,7 @@ void FEngine::init(std::string title, unsigned int width, unsigned int height)
     LOG(INFO) << "Initialization finished";
 }
 
-void FEngine::start()
+void Engine::start()
 {
     while (!m_window->isOpen()) {
     }
@@ -30,7 +33,7 @@ void FEngine::start()
     m_running = true;
 }
 
-void FEngine::update()
+void Engine::update()
 {
     // Events
     processEvents();
@@ -42,12 +45,12 @@ void FEngine::update()
     processRender();
 }
 
-bool FEngine::running()
+bool Engine::running()
 {
     return m_running;
 }
 
-void FEngine::cleanup()
+void Engine::cleanup()
 {
     ImGui::SFML::Shutdown();
 
@@ -58,12 +61,12 @@ void FEngine::cleanup()
     LOG(INFO) << "Cleanup finished";
 }
 
-void FEngine::quit()
+void Engine::quit()
 {
     m_running = false;
 }
 
-void FEngine::processRender()
+void Engine::processRender()
 {
     m_window->clear();
 
@@ -72,7 +75,7 @@ void FEngine::processRender()
     m_window->display();
 }
 
-void FEngine::processPhysics()
+void Engine::processPhysics()
 {
     ImGui::SFML::Update(*m_window, 0.016);
 
@@ -80,7 +83,7 @@ void FEngine::processPhysics()
     ImGui::End();
 }
 
-void FEngine::processEvents()
+void Engine::processEvents()
 {
     sf::Event event;
     while (m_window->pollEvent(event)) {
@@ -98,3 +101,5 @@ void FEngine::processEvents()
                 quit();
     }
 }
+
+} // namespace Frames

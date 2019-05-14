@@ -1,12 +1,12 @@
 #include <string>
 
 #include "build.h"
-#include "fengine/fengine.h"
+#include "fengine/engine.h"
 //#include "game/gamestates/rstateintro.h"
 
 int main(int argc, char* argv[])
 {
-    FEngine game;
+    Frames::Engine game;
 
     game.init("Frames b" + std::to_string(BUILD), 1280, 720);
 

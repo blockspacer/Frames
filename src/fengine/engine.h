@@ -1,13 +1,15 @@
-#ifndef FENGINE_H
-#define FENGINE_H
+#ifndef FRAMES_ENGINE_H
+#define FRAMES_ENGINE_H
 
 #include <string>
 
 #include <SFML/Graphics.hpp>
 
-class FEngine {
+namespace Frames {
+
+class Engine {
 public:
-    FEngine() {};
+    Engine() {};
 
     void init(std::string title, unsigned int width = 1280, unsigned int height = 720);
     void start();
@@ -29,4 +31,6 @@ private:
     bool m_running = false;
 };
 
-#endif // FENGINE_H
+}
+
+#endif // FRAMES_ENGINE_H
