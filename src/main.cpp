@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 {
     Frames::Engine game;
 
-    game.init("Frames b" + std::to_string(BUILD), 1280, 720);
+    game.init(std::string("Frames (build ") + GIT_COMMIT + ")", 1280, 720);
 
     //game.changeState(RhymsStateIntro::instance());
 

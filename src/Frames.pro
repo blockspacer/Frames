@@ -10,13 +10,9 @@ SOURCES += \
 # Include FEngine
 include($$PWD/fengine/FEngine.pri))
 
-# Incremental builds
-
-build_nr.target = $$PWD/build.h
-build_nr.commands = build_inc.bat
-build_nr.depends = FORCE
-#PRE_TARGETDEPS += $$PWD/build.h
-QMAKE_EXTRA_TARGETS += build_nr
+# Git commit hash as build id
+GIT_VERSION = $$system(git --git-dir $$PWD/../.git --work-tree $$PWD describe --always --tags)
+DEFINES += GIT_COMMIT=\\\"$$GIT_VERSION\\\"
 
 # Configure build directories
 release: DESTDIR = ../build/release
