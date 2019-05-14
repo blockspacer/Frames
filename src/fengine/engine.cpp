@@ -31,6 +31,8 @@ void Engine::start()
     }
 
     m_running = true;
+
+    LOG(INFO) << "Engine started";
 }
 
 void Engine::update()
