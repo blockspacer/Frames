@@ -1,8 +1,5 @@
 #include <string>
 
-#include "fengine/libs/easylogging++/easylogging++.h"
-INITIALIZE_EASYLOGGINGPP
-
 #include "build.h"
 #include "fengine/fengine.h"
 //#include "game/gamestates/rstateintro.h"
@@ -11,7 +8,7 @@ int main(int argc, char* argv[])
 {
     FEngine game;
 
-    game.init("Rhyms b" + std::to_string(BUILD), 1280, 720);
+    game.init("Frames b" + std::to_string(BUILD), 1280, 720);
 
     //game.changeState(RhymsStateIntro::instance());
 
