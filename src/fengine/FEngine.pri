@@ -5,6 +5,11 @@ HEADERS += \
     $$PWD/fengine.h
 
 ################################################################################
+# Libraries includes
+INCLUDEPATH += $$PWD/libs
+DEPENDPATH  += $$PWD/libs
+
+################################################################################
 # SFML
 INCLUDEPATH += $$PWD/libs/SFML/include
 DEPENDPATH  += $$PWD/libs/SFML/include
@@ -18,20 +23,20 @@ CONFIG(profile, debug|profile|release): LIBS += -lsfml-audio-d -lsfml-graphics-d
 
 ################################################################################
 # ImGui includes
-#DEFINES +=          IMGUI_DISABLE_INCLUDE_IMCONFIG_H
-#DEFINES +=          IMGUI_USER_CONFIG=\\\""imconfig_SFML.h"\\\"
+DEFINES +=          IMGUI_DISABLE_INCLUDE_IMCONFIG_H
+DEFINES +=          IMGUI_USER_CONFIG=\\\""imconfig_SFML.h"\\\"
 
-#LIBS += -lopengl32
+LIBS += -lopengl32
 
-#SOURCES += \
-#    $$PWD/libs/ImGui/imgui.cpp \
-#    $$PWD/libs/ImGui/imgui_draw.cpp \
-#    $$PWD/libs/ImGui/imgui_widgets.cpp \
-#    $$PWD/libs/ImGui/imgui_SFML.cpp
-#    $$PWD/libs/ImGui/imgui_demo.cpp \
+SOURCES += \
+    $$PWD/libs/ImGui/imgui.cpp \
+    $$PWD/libs/ImGui/imgui_draw.cpp \
+    $$PWD/libs/ImGui/imgui_widgets.cpp \
+    $$PWD/libs/ImGui/imgui_SFML.cpp
+    $$PWD/libs/ImGui/imgui_demo.cpp \
 
-#INCLUDEPATH += $$PWD/libs/ImGui
-#DEPENDPATH += $$PWD/libs/ImGui
+INCLUDEPATH += $$PWD/libs/ImGui
+DEPENDPATH += $$PWD/libs/ImGui
 
 ###################################################################################################
 # Easylogging++ includes

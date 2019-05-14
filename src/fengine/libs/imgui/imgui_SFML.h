@@ -26,9 +26,9 @@ namespace SFML
 
     void ProcessEvent(const sf::Event& event);
 
-    void Update(sf::RenderWindow& window, sf::Time dt);
-    void Update(sf::Window& window, sf::RenderTarget& target, sf::Time dt);
-    void Update(const sf::Vector2i& mousePos, const sf::Vector2f& displaySize, sf::Time dt);
+    void Update(sf::RenderWindow& window, double dt);
+    void Update(sf::Window& window, sf::RenderTarget& target, double dt);
+    void Update(const sf::Vector2i& mousePos, const sf::Vector2f& displaySize, double dt);
 
     void Render(sf::RenderTarget& target);
 

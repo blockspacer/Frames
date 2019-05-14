@@ -293,12 +293,12 @@ namespace SFML {
         }
     }
 
-    void Update(sf::RenderWindow& window, sf::Time dt)
+    void Update(sf::RenderWindow& window, double dt)
     {
         Update(window, window, dt);
     }
 
-    void Update(sf::Window& window, sf::RenderTarget& target, sf::Time dt)
+    void Update(sf::Window& window, sf::RenderTarget& target, double dt)
     {
         if (!s_mouseMoved) {
             if (sf::Touch::isDown(0))
@@ -315,11 +315,11 @@ namespace SFML {
         }
     }
 
-    void Update(const sf::Vector2i& mousePos, const sf::Vector2f& displaySize, sf::Time dt)
+    void Update(const sf::Vector2i& mousePos, const sf::Vector2f& displaySize, double dt)
     {
         ImGuiIO& io    = ImGui::GetIO();
         io.DisplaySize = displaySize;
-        io.DeltaTime   = dt.asSeconds();
+        io.DeltaTime   = dt;
 
         if (s_windowHasFocus) {
             if (io.WantSetMousePos) {
