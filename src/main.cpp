@@ -1,9 +1,27 @@
-#include <iostream>
+#include <string>
 
-using namespace std;
+#include "fengine/libs/easylogging++/easylogging++.h"
+INITIALIZE_EASYLOGGINGPP
 
-int main()
+#include "build.h"
+#include "fengine/fengine.h"
+//#include "game/gamestates/rstateintro.h"
+
+int main(int argc, char* argv[])
 {
-    cout << "Hello World!" << endl;
+    FEngine game;
+
+    game.init("Rhyms b" + std::to_string(BUILD), 1280, 720);
+
+    //game.changeState(RhymsStateIntro::instance());
+
+    game.start();
+
+    while (game.running()) {
+        game.update();
+    }
+
+    game.cleanup();
+
     return 0;
 }
