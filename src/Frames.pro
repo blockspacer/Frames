@@ -19,14 +19,10 @@ build_nr.depends = FORCE
 QMAKE_EXTRA_TARGETS += build_nr
 
 # Configure build directories
-Release:DESTDIR = ../build/release
-Release:OBJECTS_DIR = ../build/release/.obj
-Release:MOC_DIR = ../build/release/.moc
-Release:RCC_DIR = ../build/release/.rcc
-Release:UI_DIR = ../build/release/.ui
+release: DESTDIR = ../build/release
+debug:   DESTDIR = ../build/debug
 
-Debug:DESTDIR = ../build/debug
-Debug:OBJECTS_DIR = ../build/debug/.obj
-Debug:MOC_DIR = ../build/debug/.moc
-Debug:RCC_DIR = ../build/debug/.rcc
-Debug:UI_DIR = ../build/debug/.ui
+OBJECTS_DIR = $$DESTDIR/.obj
+MOC_DIR = $$DESTDIR/.moc
+RCC_DIR = $$DESTDIR/.qrc
+UI_DIR = $$DESTDIR/.ui
