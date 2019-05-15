@@ -1,6 +1,5 @@
+#include "build.h"
 #include <string>
-
-#include <build.h>
 
 #include "fengine/engine.h"
 //#include "game/gamestates/rstateintro.h"

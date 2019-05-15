@@ -1,10 +1,10 @@
 // Initialize Easylogging++
 #define ELPP_STL_LOGGING
-#include "libs/easylogging++/easylogging++.h"
+#include <easylogging++/easylogging++.h>
 INITIALIZE_EASYLOGGINGPP
 
+#include <imgui-SFML/imgui_SFML.h>
 #include <imgui/imgui.h>
-#include <imgui/imgui_SFML.h>
 
 #include "engine.h"
 #include "utils/timing.h"

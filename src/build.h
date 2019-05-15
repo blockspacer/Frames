@@ -1,6 +1,6 @@
 #ifndef BUILD_H
 #define BUILD_H
 
-#define BUILD_VERSION "1e856b8"
+#define BUILD_VERSION "c55dfa6"
 
 #endif // BUILD_H

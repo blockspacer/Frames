@@ -22,23 +22,18 @@ CONFIG(release, debug|profile|release): LIBS += -lsfml-audio -lsfml-graphics -ls
 CONFIG(debug, debug|profile|release): LIBS +=   -lsfml-audio-d -lsfml-graphics-d -lsfml-main-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
 CONFIG(profile, debug|profile|release): LIBS += -lsfml-audio-d -lsfml-graphics-d -lsfml-main-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
 
-
 ################################################################################
 # ImGui includes
 DEFINES +=          IMGUI_DISABLE_INCLUDE_IMCONFIG_H
-DEFINES +=          IMGUI_USER_CONFIG=\\\""imconfig_SFML.h"\\\"
-
-LIBS += -lopengl32
+DEFINES +=          IMGUI_USER_CONFIG=\\\""imgui-SFML\imconfig_SFML.h"\\\"
+LIBS +=             -lopengl32
 
 SOURCES += \
     $$PWD/libs/ImGui/imgui.cpp \
     $$PWD/libs/ImGui/imgui_draw.cpp \
     $$PWD/libs/ImGui/imgui_widgets.cpp \
-    $$PWD/libs/ImGui/imgui_SFML.cpp
     $$PWD/libs/ImGui/imgui_demo.cpp \
-
-INCLUDEPATH += $$PWD/libs/ImGui
-DEPENDPATH += $$PWD/libs/ImGui
+    $$PWD/libs/ImGui-SFML/imgui_SFML.cpp
 
 ###################################################################################################
 # Easylogging++ includes
