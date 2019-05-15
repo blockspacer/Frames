@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
 {
     Frames::Engine game;
 
-    game.init(std::string("Frames (version ") + BUILD_VERSION + ")", 1280, 720);
+    game.init(std::string("Frames (build ") + BUILD_VERSION + ")", 1280, 720);
 
     //game.changeState(RhymsStateIntro::instance());
 
