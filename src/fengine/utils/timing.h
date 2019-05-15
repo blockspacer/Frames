@@ -48,6 +48,7 @@ namespace timing {
     };
 
     class Ticker {
+    public:
         /**
          * @brief Setups a ticker with an update rate in updates/second
          * @param updateRate The update rate in updates/s
