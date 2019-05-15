@@ -118,7 +118,7 @@ namespace timing {
         return false;
     }
 
-    Clock::duration Ticker::getFrametime()
+    Clock::duration Ticker::getDelta()
     {
         return m_frametime;
     }

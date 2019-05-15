@@ -65,7 +65,7 @@ namespace timing {
          * @brief Returns the time between the last two updates
          * @return The time between the last two updates
          */
-        Clock::duration getFrametime();
+        Clock::duration getDelta();
 
     private:
         bool m_instant = true;
