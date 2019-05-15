@@ -48,9 +48,22 @@ namespace timing {
     };
 
     class Ticker {
+        /**
+         * @brief Setups a ticker with an update rate in updates/second
+         * @param updateRate The update rate in updates/s
+         */
         Ticker(const unsigned int updateRate = 0);
 
+        /**
+         * @brief Updates the ticker
+         * @return True if it needs to be updated
+         */
         bool update();
+
+        /**
+         * @brief Returns the time between the last two updates
+         * @return The time between the last two updates
+         */
         Clock::duration getFrametime();
 
     private:
