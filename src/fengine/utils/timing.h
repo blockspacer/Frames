@@ -47,6 +47,22 @@ namespace timing {
         static void calibrate();
     };
 
+    class Ticker {
+        Ticker(const unsigned int updateRate = 0);
+
+        bool update();
+        Clock::duration getFrametime();
+
+    private:
+        bool m_instant = true;
+
+        Clock::duration m_accumulator = Clock::duration::zero();
+        Clock::duration m_timestep    = Clock::duration::zero();
+        Clock::duration m_frametime   = Clock::duration::zero();
+
+        Clock::time_point m_lastUpdate;
+    };
+
 } // namespace timing
 
 } // namespace Frames

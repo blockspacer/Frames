@@ -87,6 +87,38 @@ namespace timing {
 #endif
     }
 
+    Ticker::Ticker(const unsigned int updateRate)
+    {
+        if (updateRate != 0) {
+            m_instant    = false;
+            m_timestep   = std::chrono::nanoseconds(1000000000 / updateRate);
+            m_lastUpdate = Clock::now();
+        }
+    }
+
+    bool Ticker::update()
+    {
+        auto timeNow  = Clock::now();
+        m_accumulator = (timeNow - m_lastUpdate);
+
+        // Update if enough time has passed since lastUpdate;
+        if (m_accumulator >= m_timestep) {
+            m_frametime = m_accumulator;
+            while (m_accumulator >= m_timestep)
+                m_accumulator -= m_timestep;
+
+            m_lastUpdate = timeNow;
+            return true;
+        }
+
+        return false;
+    }
+
+    Clock::duration Ticker::getFrametime()
+    {
+        return m_frametime;
+    }
+
 } // namespace timing
 
 } // namespace Frames
