@@ -37,13 +37,10 @@ void Engine::start()
 
 void Engine::update()
 {
-    // Events
     processEvents();
 
-    // Update
     processPhysics();
 
-    // Render
     processRender();
 }
 
@@ -66,6 +63,8 @@ void Engine::cleanup()
 void Engine::quit()
 {
     m_running = false;
+
+    LOG(INFO) << "Exiting";
 }
 
 void Engine::processRender()
