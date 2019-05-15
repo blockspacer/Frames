@@ -9,7 +9,7 @@ INITIALIZE_EASYLOGGINGPP
 #include "engine.h"
 #include "utils/timing.h"
 
-namespace Frames {
+namespace frames {
 
 void Engine::init(std::string title, unsigned int width, unsigned int height)
 {

@@ -5,7 +5,7 @@
 
 #include <SFML/Graphics.hpp>
 
-namespace Frames {
+namespace frames {
 
 class Engine {
 public:
