@@ -1,3 +1,6 @@
 [submodule "src/fengine/libs/imgui"]
 	path = src/fengine/libs/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "src/fengine/libs/entt"]
+	path = src/fengine/libs/entt
+	url = https://github.com/skypjack/entt.git

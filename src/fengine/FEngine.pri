@@ -1,9 +1,11 @@
 SOURCES += \
     $$PWD/engine.cpp \
+    $$PWD/scheduler.cpp \
     $$PWD/utils/timing.cpp
 
 HEADERS += \
     $$PWD/engine.h \
+    $$PWD/scheduler.h \
     $$PWD/utils/timing.h
 
 ################################################################################
@@ -18,9 +20,17 @@ DEPENDPATH  += $$PWD/libs/SFML/include
 
 LIBS += -L$$PWD/libs/SFML/lib
 
-CONFIG(release, debug|profile|release): LIBS += -lsfml-audio -lsfml-graphics -lsfml-main -lsfml-network -lsfml-window -lsfml-system
-CONFIG(debug, debug|profile|release): LIBS +=   -lsfml-audio-d -lsfml-graphics-d -lsfml-main-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
-CONFIG(profile, debug|profile|release): LIBS += -lsfml-audio-d -lsfml-graphics-d -lsfml-main-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
+CONFIG(release, debug|profile|release): LIBS += -lsfml-audio -lsfml-graphics \
+                                                -lsfml-main -lsfml-network \
+                                                -lsfml-window -lsfml-system
+CONFIG(debug, debug|profile|release): LIBS +=   -lsfml-audio-d \
+                                                -lsfml-graphics-d \
+                                                -lsfml-main-d -lsfml-network-d \
+                                                -lsfml-window-d -lsfml-system-d
+CONFIG(profile, debug|profile|release): LIBS += -lsfml-audio-d \
+                                                -lsfml-graphics-d \
+                                                -lsfml-main-d -lsfml-network-d \
+                                                -lsfml-window-d -lsfml-system-d
 
 ################################################################################
 # ImGui includes
@@ -35,8 +45,13 @@ SOURCES += \
     $$PWD/libs/ImGui/imgui_demo.cpp \
     $$PWD/libs/ImGui-SFML/imgui_SFML.cpp
 
-###################################################################################################
+################################################################################
 # Easylogging++ includes
 
 SOURCES += $$PWD/libs/easylogging++/easylogging++.cc
 HEADERS += $$PWD/libs/easylogging++/easylogging++.h
+
+################################################################################
+# Entt
+INCLUDEPATH += $$PWD/libs/entt/single_include/
+DEPENDPATH  += $$PWD/libs/entt/single_include/
