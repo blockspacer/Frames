@@ -98,6 +98,10 @@ namespace timing {
 
     bool Ticker::update()
     {
+        // Always update
+        if (m_instant)
+            return true;
+
         auto timeNow  = Clock::now();
         m_accumulator = (timeNow - m_lastUpdate);
 
