@@ -6,6 +6,10 @@ SOURCES += \
 HEADERS += \
     $$PWD/engine.h \
     $$PWD/scheduler.h \
+    $$PWD/ui/graph.h \
+    $$PWD/ui/graph.tpp \
+    $$PWD/ui/metrics.h \
+    $$PWD/utils/string.h \
     $$PWD/utils/timing.h
 
 ################################################################################

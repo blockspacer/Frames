@@ -1,12 +1,17 @@
 #include "build.h"
 #include <string>
 
+#include <chrono>
+#include <thread>
+
 #include "fengine/engine.h"
 //#include "game/gamestates/rstateintro.h"
 
+#include <easylogging++/easylogging++.h>
+
 int main(int argc, char* argv[])
 {
-    Frames::Engine game;
+    frames::Engine game;
 
     game.init(std::string("Frames (build ") + BUILD_VERSION + ")", 1280, 720);
 
