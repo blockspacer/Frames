@@ -2,14 +2,33 @@
 #define FRAMES_TIMING_H
 
 #include <chrono>
+#include <functional>
 
+/*
 #if defined _WIN32 || defined __CYGWIN__ || ((defined __i386 || defined _M_IX86 || defined __x86_64__ || defined _M_X64) && !defined __ANDROID__) || __ARM_ARCH >= 6
 #define HAVE_RDTSCP
+#endif
+*/
+
+#ifdef HAVE_RDTSCP
+#include <thread>
+#elif _WIN32
+#include <windows.h>
 #endif
 
 namespace frames {
 
 namespace timing {
+#ifdef _WIN32
+    namespace {
+        const int64_t g_Frequency = []() -> int64_t {
+            LARGE_INTEGER frequency;
+            QueryPerformanceFrequency(&frequency);
+            return frequency.QuadPart;
+        }();
+    }
+#endif
+
     // Conversion utilities
     typedef std::chrono::duration<double> dsec;
     typedef std::chrono::duration<double, std::milli> dmilli;
@@ -17,12 +36,11 @@ namespace timing {
 
     /**
      * @brief High resolution clock
-     * @note This has a better resolution than
-     * std::chrono::high_resolution::clock on platforms with rdtscp support or
-     * on Windows.
+     * @note This has the same or a better resolution than
+     * std::chrono::high_resolution::clock especially on Windows.
      */
     struct Clock {
-        typedef long long rep;
+        typedef int64_t rep;
         typedef std::nano period;
         typedef std::chrono::duration<rep, period> duration;
         typedef std::chrono::time_point<Clock> time_point;
@@ -31,7 +49,19 @@ namespace timing {
         static double multiplier;
 #endif
 
-        static inline time_point now();
+        static inline time_point now()
+        {
+#ifdef HAVE_RDTSCP
+            return time_point(duration(uint64_t(multiplier * readTSCp())));
+#elif _WIN32
+            LARGE_INTEGER count;
+            QueryPerformanceCounter(&count);
+            return time_point(
+                duration(count.QuadPart * static_cast<rep>(period::den) / g_Frequency));
+#else
+            return time_point(std::chrono::high_resolution_clock::now().time_since_epoch());
+#endif
+        }
 
         /**
          * @brief Estimates the clock resolution
@@ -75,6 +105,25 @@ namespace timing {
         Clock::duration m_frametime   = Clock::duration::zero();
 
         Clock::time_point m_lastUpdate;
+    };
+
+    template <class T>
+    struct ScopedMeasure {
+        typedef std::function<void(Clock::duration)> Callback_type;
+
+        inline ScopedMeasure(Callback_type cb)
+        {
+            start = Clock::now();
+        }
+
+        inline ~ScopedMeasure()
+        {
+            callback(Clock::now() - start);
+        }
+
+    private:
+        Clock::time_point start;
+        Callback_type callback;
     };
 
 } // namespace timing
