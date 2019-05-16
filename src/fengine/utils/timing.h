@@ -1,10 +1,15 @@
 #ifndef FRAMES_TIMING_H
 #define FRAMES_TIMING_H
 
+#include <easylogging++/easylogging++.h>
+
 #include <chrono>
 #include <functional>
 
+#define SCOPED_MEASURE(cb) frames::timing::ScopedMeasure timer__COUNTER__(cb)
+
 /*
+// Using rdtscp is disabled because it doesn't measure time anyways
 #if defined _WIN32 || defined __CYGWIN__ || ((defined __i386 || defined _M_IX86 || defined __x86_64__ || defined _M_X64) && !defined __ANDROID__) || __ARM_ARCH >= 6
 #define HAVE_RDTSCP
 #endif
@@ -107,13 +112,13 @@ namespace timing {
         Clock::time_point m_lastUpdate;
     };
 
-    template <class T>
     struct ScopedMeasure {
         typedef std::function<void(Clock::duration)> Callback_type;
 
         inline ScopedMeasure(Callback_type cb)
         {
-            start = Clock::now();
+            callback = cb;
+            start    = Clock::now();
         }
 
         inline ~ScopedMeasure()
