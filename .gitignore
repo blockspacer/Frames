@@ -42,5 +42,6 @@ target_wrapper.*
 # QtCreator CMake
 CMakeLists.txt.user*
 
-# Build folder
+# Builds
 /build
+build.h
