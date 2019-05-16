@@ -115,10 +115,10 @@ namespace timing {
     struct ScopedMeasure {
         typedef std::function<void(Clock::duration)> Callback_type;
 
-        inline ScopedMeasure(Callback_type cb)
+        inline ScopedMeasure(const Callback_type& cb)
+            : callback(cb)
         {
-            callback = cb;
-            start    = Clock::now();
+            start = Clock::now();
         }
 
         inline ~ScopedMeasure()
