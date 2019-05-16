@@ -22,7 +22,7 @@ void Engine::init(std::string title, unsigned int width, unsigned int height)
 
     ImGui::SFML::Init(*m_window);
 
-    m_frametime = new ui::Metric<200>("Frametime (ms)");
+    m_frametime = new ui::TimeGraph<200>("Frametime (ms)");
 
     // Scheduler
     m_scheduler.init();

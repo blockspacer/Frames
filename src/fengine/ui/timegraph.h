@@ -1,5 +1,5 @@
-#ifndef METRICS_H
-#define METRICS_H
+#ifndef TIMEGRAPH_H
+#define TIMEGRAPH_H
 
 #include <cstdint>
 
@@ -9,9 +9,9 @@
 namespace frames {
 namespace ui {
     template <int count>
-    class Metric : public Graph<count> {
+    class TimeGraph : public Graph<count> {
     public:
-        Metric(const std::string& name)
+        TimeGraph(const std::string& name)
             : Graph<count>()
             , m_name(name)
         {
@@ -53,4 +53,4 @@ namespace ui {
 } // namespace ui
 } // namespace frames
 
-#endif // METRICS_H
+#endif // TIMEGRAPH_H
