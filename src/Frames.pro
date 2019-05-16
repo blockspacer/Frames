@@ -10,9 +10,6 @@ SOURCES += \
 # Include FEngine
 include($$PWD/fengine/FEngine.pri))
 
-# Save the git commit hash to build.h
-system(VersionManager)
-
 # Configure build directories
 release: DESTDIR = ../build/release
 debug:   DESTDIR = ../build/debug
