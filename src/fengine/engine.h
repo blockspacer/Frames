@@ -7,7 +7,7 @@
 #include <entt/entt.hpp>
 
 #include "scheduler.h"
-#include "ui/metrics.h"
+#include "ui/timegraph.h"
 
 namespace frames {
 
@@ -34,7 +34,7 @@ private:
     Scheduler m_scheduler;
     entt::registry m_registry;
 
-    ui::Metric<200>* m_frametime;
+    ui::TimeGraph<200>* m_frametime;
 
     bool m_running = false;
 };
