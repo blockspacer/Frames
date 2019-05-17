@@ -94,7 +94,7 @@ void Engine::processRender(timing::Clock::duration delta)
     m_window->clear();
 
     {
-        ZoneScopedN("render");
+        ZoneScopedN("Engine::processRender");
         ImGui::SFML::Update(*m_window, dt);
 
         ImGui::Begin("Hello world!");
@@ -114,14 +114,14 @@ void Engine::processRender(timing::Clock::duration delta)
 
 void Engine::processPhysics(timing::Clock::duration delta)
 {
-    ZoneScopedN("physics");
+    ZoneScopedN("Engine::processPhysics");
 
     const auto dt = std::chrono::duration_cast<timing::dsec>(delta).count();
 }
 
 void Engine::processEvents()
 {
-    ZoneScopedN("events");
+    ZoneScopedN("Engine::processEvents");
 
     sf::Event event;
     while (m_window->pollEvent(event)) {
