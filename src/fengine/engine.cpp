@@ -18,6 +18,8 @@ namespace frames {
 
 void Engine::init(std::string title, unsigned int width, unsigned int height)
 {
+    ZoneScoped;
+    LOG(INFO) << "Engine::init";
     el::Loggers::reconfigureAllLoggers(el::ConfigurationType::Format, "[%levshort] %msg");
 
     m_window = new sf::RenderWindow(sf::VideoMode(width, height),
@@ -37,22 +39,28 @@ void Engine::init(std::string title, unsigned int width, unsigned int height)
     timing::Clock::calibrate();
 
     m_running = false;
-    LOG(INFO) << "Engine::init";
+
+    LOG(INFO) << "Engine::init finished";
 }
 
 void Engine::start()
 {
-    while (!m_window->isOpen()) {
-    }
+    ZoneScoped;
+    LOG(INFO) << "Engine::start";
 
     m_running = true;
+}
 
-    LOG(INFO) << "Engine::start";
+void Engine::quit()
+{
+    ZoneScoped;
+    m_running = false;
+
+    LOG(INFO) << "Engine::quit";
 }
 
 void Engine::update()
 {
-    //OPTICK_FRAME("MainThread");
     m_scheduler.update();
 }
 
@@ -63,82 +71,81 @@ bool Engine::running()
 
 void Engine::changeState(IGameState* state, bool init)
 {
+    ZoneScoped;
+    LOG(INFO) << "Engine::changeState";
+
+    if (!m_states.empty()) {
+        m_states.back()->cleanup();
+        m_states.pop_back();
+    }
+
+    m_states.push_back(state);
+    if (init) {
+        state->init();
+    }
 }
 
 void Engine::pushState(IGameState* state)
 {
+    ZoneScoped;
+    LOG(INFO) << "Engine::pushState";
+
+    if (!m_states.empty()) {
+        m_states.back()->setPaused(true);
+    }
+
+    m_states.push_back(state);
+    state->init();
 }
 
 void Engine::popState()
 {
+    ZoneScoped;
+    LOG(INFO) << "Engine::popState";
+
+    if (!m_states.empty()) {
+        m_states.back()->cleanup();
+        m_states.pop_back();
+    }
+
+    if (!m_states.empty()) {
+        m_states.back()->setPaused(false);
+    }
 }
 
 void Engine::cleanup()
 {
-    ImGui::SFML::Shutdown();
+    ZoneScoped;
+    LOG(INFO) << "Engine::cleanup";
 
-    if (m_window->isOpen())
-        m_window->close();
+    {
+        ZoneScopedN("ImGui::SFML::Shutdown");
+        ImGui::SFML::Shutdown();
+    }
 
-    delete m_window;
-    delete m_frametime;
+    {
+        ZoneScopedN("Close");
+        if (m_window->isOpen())
+            m_window->close();
+    }
+
+    {
+        ZoneScopedN("Delete");
+        delete m_window;
+        delete m_frametime;
+    }
 
     while (!m_states.empty()) {
         m_states.back()->cleanup();
         m_states.pop_back();
     }
 
-    LOG(INFO) << "Engine::cleanup";
-}
-
-void Engine::quit()
-{
-    m_running = false;
-
-    LOG(INFO) << "Exiting";
-}
-
-void Engine::processRender(timing::Clock::duration delta)
-{
-    SCOPED_MEASURE([=](timing::Clock::duration time) {
-    });
-
-    const auto dt = std::chrono::duration_cast<timing::dsec>(delta).count();
-    m_frametime->update(delta);
-
-    m_window->clear();
-
-    {
-        ZoneScopedN("Engine::processRender");
-        ImGui::SFML::Update(*m_window, dt);
-
-        ImGui::Begin("Hello world!");
-        ImGui::End();
-
-        m_frametime->render();
-
-        ImGui::ShowStyleEditor();
-
-        ImGui::EndFrame();
-
-        ImGui::SFML::Render(*m_window);
-    }
-
-    m_window->display();
-
-    FrameMark;
-}
-
-void Engine::processPhysics(timing::Clock::duration delta)
-{
-    ZoneScopedN("Engine::processPhysics");
-
-    const auto dt = std::chrono::duration_cast<timing::dsec>(delta).count();
+    LOG(INFO) << "Engine::cleanup finished";
 }
 
 void Engine::processEvents()
 {
-    ZoneScopedN("Engine::processEvents");
+    ZoneScoped;
 
     sf::Event event;
     while (m_window->pollEvent(event)) {
@@ -155,6 +162,47 @@ void Engine::processEvents()
             if (event.key.code == sf::Keyboard::Escape)
                 quit();
     }
+}
+
+void Engine::processPhysics(timing::Clock::duration delta)
+{
+    ZoneScoped;
+
+    if (!m_states.empty()) {
+        m_states.back()->update(delta, m_registry);
+    }
+}
+
+void Engine::processRender(timing::Clock::duration delta)
+{
+    ZoneScoped;
+
+    const auto dt = std::chrono::duration_cast<timing::dsec>(delta).count();
+    m_frametime->update(delta);
+
+    m_window->clear();
+
+    ImGui::SFML::Update(*m_window, dt);
+
+    if (!m_states.empty()) {
+        ZoneScopedN("State rendering");
+        m_states.back()->draw();
+    }
+
+    ImGui::Begin("Hello world!");
+    ImGui::End();
+
+    m_frametime->render();
+
+    ImGui::ShowStyleEditor();
+
+    ImGui::EndFrame();
+
+    ImGui::SFML::Render(*m_window);
+
+    m_window->display();
+
+    FrameMark;
 }
 
 } // namespace Frames

@@ -32,8 +32,8 @@ public:
 
 private:
     void processEvents();
-    void processRender(timing::Clock::duration delta);
     void processPhysics(timing::Clock::duration delta);
+    void processRender(timing::Clock::duration delta);
 
 private:
     sf::RenderWindow* m_window;
