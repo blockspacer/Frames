@@ -13,9 +13,7 @@ void PlotLinesStats(const std::string& label,
                     const std::array<double, n>& values,
                     double scale_min = std::numeric_limits<double>::min(),
                     double scale_max = std::numeric_limits<double>::max(),
-                    double avg       = std::numeric_limits<double>::max(),
-                    bool displayMax  = false,
-                    bool displayMin  = false);
+                    double avg       = std::numeric_limits<double>::max());
 }
 
 namespace frames {
@@ -24,45 +22,57 @@ namespace ui {
     template <std::size_t n>
     class Graph {
     public:
-        Graph()
+        Graph(const std::string& name)
+            : m_name(name)
         {
             // Initialize data
-            m_data = new std::array<float, n>;
-            for (unsigned int i = 0; i < n; ++i) {
-                m_data->at(i) = 0;
-            }
+            m_data.fill(0);
         }
 
-        Graph(std::array<float, n>* data)
+        Graph(std::array<double, n>* data)
             : m_data(data)
         {
         }
 
-        void push(float value)
+        void push(double value)
         {
-            // Offset all the data by one
-            for (int i = 0; i < n - 1; i++) {
-                m_data[i] = m_data[i + 1];
-            }
-            // Put the new value at the beginning
+            // Offset all the previous data by 1
+            std::rotate(m_data->begin(), m_data->begin() + 1, m_data->end());
+            // Append the new value to the end
             m_data[n - 1] = value;
         }
 
-        void setOverlayText(std::string text)
+        void render() const
         {
-            m_overlayText = text;
-        }
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.f);
+            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.f, 0.f));
+            ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(.2f, .2f, .2f, 1.f));
 
-        void plot()
-        {
-            ImGui::PlotLines(m_name.c_str(), m_data->data(), n, 0, m_overlayText.c_str(), m_min, m_max);
+            ImGui::SetNextWindowPos(ImVec2(15, 15));
+            //ImGui::SetNextWindowPos(ImVec2(15 - padding.x, ImGui::GetIO().DisplaySize.y - padding.y - 75 - 15));
+            ImGui::Begin("frametime_plot", nullptr,
+                         ImGuiWindowFlags_NoTitleBar
+                             | ImGuiWindowFlags_NoResize
+                             | ImGuiWindowFlags_NoScrollbar
+                             | ImGuiWindowFlags_NoInputs
+                             | ImGuiWindowFlags_NoSavedSettings
+                             | ImGuiWindowFlags_NoFocusOnAppearing
+                             | ImGuiWindowFlags_NoBringToFrontOnFocus);
+            ImGui::PlotLinesStats<200>(this->m_name, this->m_data,
+                                       0, 40, this->m_avg);
+            ImGui::End();
+
+            ImGui::PopStyleColor();
+            ImGui::PopStyleVar(4);
         }
 
     protected:
-        std::array<float, n>* m_data = nullptr;
-        std::string m_name, m_overlayText;
+        std::array<double, n> m_data;
+        std::string m_name;
 
-        float m_max = 0, m_min = 0;
+        double m_avg = 0;
     };
 
 } // namespace ui
