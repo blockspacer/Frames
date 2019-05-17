@@ -1,9 +1,6 @@
 #include "build.h"
 #include <string>
 
-#include <chrono>
-#include <thread>
-
 #include "fengine/engine.h"
 //#include "game/gamestates/rstateintro.h"
 

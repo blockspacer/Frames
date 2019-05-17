@@ -63,12 +63,11 @@ INCLUDEPATH += $$PWD/libs/entt/single_include/
 DEPENDPATH  += $$PWD/libs/entt/single_include/
 
 ################################################################################
-# Optick profiler
-#INCLUDEPATH += $$PWD/libs/optick/src/
-#DEPENDPATH  += $$PWD/libs/optick/src/
+# Tracy profiler
+SOURCES += $$PWD/libs/tracy/TracyClient.cpp
+INCLUDEPATH += $$PWD/libs/tracy/
+DEPENDPATH  += $$PWD/libs/tracy/
+LIBS += -ladvapi32
 
-#SOURCES +=      $$PWD/libs/optick/src/optick_core.cpp \
-#                $$PWD/libs/optick/src/optick_gpu.cpp \
-#                $$PWD/libs/optick/src/optick_message.cpp \
-#                $$PWD/libs/optick/src/optick_serialization.cpp \
-#                $$PWD/libs/optick/src/optick_server.cpp
+CONFIG(debug, debug|profile|release): DEFINES += TRACY_ENABLE
+CONFIG(profile, debug|profile|release): DEFINES += TRACY_ENABLE

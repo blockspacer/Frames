@@ -8,7 +8,7 @@
 #include <easylogging++/easylogging++.h>
 INITIALIZE_EASYLOGGINGPP
 
-//#include <optick.h>
+#include <Tracy.hpp>
 
 #include "engine.h"
 #include "utils/timing.h"
@@ -85,7 +85,6 @@ void Engine::quit()
 
 void Engine::processRender(timing::Clock::duration delta)
 {
-    //OPTICK_EVENT();
     SCOPED_MEASURE([=](timing::Clock::duration time) {
     });
 
@@ -94,29 +93,36 @@ void Engine::processRender(timing::Clock::duration delta)
 
     m_window->clear();
 
-    ImGui::SFML::Update(*m_window, dt);
+    {
+        ZoneScopedN("render");
+        ImGui::SFML::Update(*m_window, dt);
 
-    ImGui::Begin("Hello world!");
-    ImGui::End();
+        ImGui::Begin("Hello world!");
+        ImGui::End();
 
-    m_frametime->render();
+        m_frametime->render();
 
-    ImGui::EndFrame();
+        ImGui::EndFrame();
 
-    ImGui::SFML::Render(*m_window);
+        ImGui::SFML::Render(*m_window);
+    }
 
     m_window->display();
+
+    FrameMark;
 }
 
 void Engine::processPhysics(timing::Clock::duration delta)
 {
-    //OPTICK_EVENT();
+    ZoneScopedN("physics");
+
     const auto dt = std::chrono::duration_cast<timing::dsec>(delta).count();
 }
 
 void Engine::processEvents()
 {
-    //OPTICK_EVENT();
+    ZoneScopedN("events");
+
     sf::Event event;
     while (m_window->pollEvent(event)) {
         ImGui::SFML::ProcessEvent(event);
