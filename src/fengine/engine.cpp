@@ -11,6 +11,7 @@ INITIALIZE_EASYLOGGINGPP
 #include <Tracy.hpp>
 
 #include "engine.h"
+#include "igamestate.h"
 #include "utils/timing.h"
 
 namespace frames {
@@ -32,14 +33,11 @@ void Engine::init(std::string title, unsigned int width, unsigned int height)
     m_scheduler.add(std::bind(&Engine::processPhysics, this, std::placeholders::_1), 120);
     m_scheduler.add(std::bind(&Engine::processRender, this, std::placeholders::_1), 60);
 
-    auto t1 = timing::Clock::now();
+    // Calibrate clock (if needed)
     timing::Clock::calibrate();
-    auto t2 = timing::Clock::now();
-
-    LOG(INFO) << "dt : " << std::chrono::duration_cast<timing::dmilli>(t2 - t1).count();
 
     m_running = false;
-    LOG(INFO) << "Initialization finished";
+    LOG(INFO) << "Engine::init";
 }
 
 void Engine::start()
@@ -49,7 +47,7 @@ void Engine::start()
 
     m_running = true;
 
-    LOG(INFO) << "Engine started";
+    LOG(INFO) << "Engine::start";
 }
 
 void Engine::update()
@@ -63,17 +61,34 @@ bool Engine::running()
     return m_running;
 }
 
+void Engine::changeState(IGameState* state, bool init)
+{
+}
+
+void Engine::pushState(IGameState* state)
+{
+}
+
+void Engine::popState()
+{
+}
+
 void Engine::cleanup()
 {
     ImGui::SFML::Shutdown();
 
     if (m_window->isOpen())
         m_window->close();
-    delete m_window;
 
+    delete m_window;
     delete m_frametime;
 
-    LOG(INFO) << "Cleanup finished";
+    while (!m_states.empty()) {
+        m_states.back()->cleanup();
+        m_states.pop_back();
+    }
+
+    LOG(INFO) << "Engine::cleanup";
 }
 
 void Engine::quit()
@@ -101,6 +116,8 @@ void Engine::processRender(timing::Clock::duration delta)
         ImGui::End();
 
         m_frametime->render();
+
+        ImGui::ShowStyleEditor();
 
         ImGui::EndFrame();
 

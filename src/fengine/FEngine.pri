@@ -5,6 +5,7 @@ SOURCES += \
 
 HEADERS += \
     $$PWD/engine.h \
+    $$PWD/igamestate.h \
     $$PWD/scheduler.h \
     $$PWD/ui/graph.h \
     $$PWD/ui/graph.tpp \

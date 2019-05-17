@@ -112,6 +112,20 @@ namespace timing {
         Clock::time_point m_lastUpdate;
     };
 
+    class Event {
+        typedef std::function<void()> Callback_type;
+
+    public:
+        void in(Clock::duration when, Callback_type what);
+
+        void update();
+
+    private:
+        Clock::time_point m_timeout;
+        Callback_type m_callback;
+        bool m_started = false;
+    };
+
     struct ScopedMeasure {
         typedef std::function<void(Clock::duration)> Callback_type;
 

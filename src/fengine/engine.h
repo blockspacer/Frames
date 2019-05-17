@@ -11,18 +11,24 @@
 
 namespace frames {
 
+class IGameState;
+
 class Engine {
 public:
     Engine() {};
 
     void init(std::string title, unsigned int width = 1280, unsigned int height = 720);
+    void cleanup();
+
     void start();
+    void quit();
 
     void update();
     bool running();
 
-    void quit();
-    void cleanup();
+    void changeState(IGameState* state, bool init = true);
+    void pushState(IGameState* state);
+    void popState();
 
 private:
     void processEvents();
@@ -33,6 +39,8 @@ private:
     sf::RenderWindow* m_window;
     Scheduler m_scheduler;
     entt::registry m_registry;
+
+    std::vector<IGameState*> m_states;
 
     ui::TimeGraph<200>* m_frametime;
 

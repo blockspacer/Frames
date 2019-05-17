@@ -11,6 +11,8 @@
 #include <x86intrin.h>
 #endif
 
+#include <Tracy.hpp>
+
 namespace frames {
 
 namespace timing {
@@ -83,9 +85,10 @@ namespace timing {
 
         // Update if enough time has passed since lastUpdate;
         if (m_accumulator >= m_timestep) {
-            m_frametime = m_accumulator;
-            while (m_accumulator >= m_timestep)
-                m_accumulator -= m_timestep;
+            m_frametime   = m_accumulator;
+            m_accumulator = Clock::duration::zero();
+            //while (m_accumulator >= m_timestep)
+            //    m_accumulator -= m_timestep;
 
             m_lastUpdate = timeNow;
             return true;
@@ -97,6 +100,21 @@ namespace timing {
     Clock::duration Ticker::getDelta()
     {
         return m_frametime;
+    }
+
+    void Event::in(Clock::duration when, Event::Callback_type what)
+    {
+        m_callback = what;
+        m_timeout  = Clock::now() + when;
+        m_started  = true;
+    }
+
+    void Event::update()
+    {
+        if (m_started && Clock::now() >= m_timeout) {
+            m_started = false;
+            m_callback();
+        }
     }
 
 } // namespace timing
