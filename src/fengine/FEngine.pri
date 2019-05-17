@@ -12,6 +12,8 @@ HEADERS += \
     $$PWD/utils/string.h \
     $$PWD/utils/timing.h
 
+DEFINES += NOMINMAX
+
 ################################################################################
 # Libraries includes
 INCLUDEPATH += $$PWD/libs
@@ -59,3 +61,14 @@ HEADERS += $$PWD/libs/easylogging++/easylogging++.h
 # Entt
 INCLUDEPATH += $$PWD/libs/entt/single_include/
 DEPENDPATH  += $$PWD/libs/entt/single_include/
+
+################################################################################
+# Optick profiler
+#INCLUDEPATH += $$PWD/libs/optick/src/
+#DEPENDPATH  += $$PWD/libs/optick/src/
+
+#SOURCES +=      $$PWD/libs/optick/src/optick_core.cpp \
+#                $$PWD/libs/optick/src/optick_gpu.cpp \
+#                $$PWD/libs/optick/src/optick_message.cpp \
+#                $$PWD/libs/optick/src/optick_serialization.cpp \
+#                $$PWD/libs/optick/src/optick_server.cpp

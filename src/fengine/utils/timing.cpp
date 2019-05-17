@@ -3,6 +3,7 @@
 #include <easylogging++/easylogging++.h>
 
 #include <cstdint>
+#include <numeric>
 
 #ifdef _MSC_VER
 #include <intrin.h>

@@ -1,12 +1,14 @@
+#include <thread>
+
+#include <imgui-SFML/imgui_SFML.h>
+#include <imgui/imgui.h>
+
 // Initialize Easylogging++
 #define ELPP_STL_LOGGING
 #include <easylogging++/easylogging++.h>
 INITIALIZE_EASYLOGGINGPP
 
-#include <thread>
-
-#include <imgui-SFML/imgui_SFML.h>
-#include <imgui/imgui.h>
+//#include <optick.h>
 
 #include "engine.h"
 #include "utils/timing.h"
@@ -52,6 +54,7 @@ void Engine::start()
 
 void Engine::update()
 {
+    //OPTICK_FRAME("MainThread");
     m_scheduler.update();
 }
 
@@ -82,6 +85,7 @@ void Engine::quit()
 
 void Engine::processRender(timing::Clock::duration delta)
 {
+    //OPTICK_EVENT();
     SCOPED_MEASURE([=](timing::Clock::duration time) {
     });
 
@@ -106,11 +110,13 @@ void Engine::processRender(timing::Clock::duration delta)
 
 void Engine::processPhysics(timing::Clock::duration delta)
 {
+    //OPTICK_EVENT();
     const auto dt = std::chrono::duration_cast<timing::dsec>(delta).count();
 }
 
 void Engine::processEvents()
 {
+    //OPTICK_EVENT();
     sf::Event event;
     while (m_window->pollEvent(event)) {
         ImGui::SFML::ProcessEvent(event);

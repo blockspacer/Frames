@@ -4,3 +4,6 @@
 [submodule "src/fengine/libs/entt"]
 	path = src/fengine/libs/entt
 	url = https://github.com/skypjack/entt.git
+[submodule "src/fengine/libs/tracy"]
+	path = src/fengine/libs/tracy
+	url = https://bitbucket.org/wolfpld/tracy.git
