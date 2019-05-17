@@ -7,6 +7,8 @@
 #include <functional>
 #include <vector>
 
+#include <Tracy.hpp>
+
 namespace ImGui {
 template <std::size_t n>
 void PlotLinesStats(const std::string& label,
@@ -36,14 +38,16 @@ namespace ui {
 
         void push(double value)
         {
+            ZoneScoped;
             // Offset all the previous data by 1
-            std::rotate(m_data->begin(), m_data->begin() + 1, m_data->end());
+            std::rotate(m_data.begin(), m_data.begin() + 1, m_data.end());
             // Append the new value to the end
             m_data[n - 1] = value;
         }
 
         void render() const
         {
+            ZoneScoped;
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
             ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
             ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.f);
