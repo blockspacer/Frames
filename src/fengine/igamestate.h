@@ -1,33 +1,36 @@
 #ifndef IGAMESTATE_H
 #define IGAMESTATE_H
 
-#include "utils/timing.h"
+#include <SFML/Window/Event.hpp>
 #include <entt/entt.hpp>
+
+#include "engine.h"
+#include "utils/timing.h"
 
 namespace frames {
 
 class IGameState {
 public:
-    virtual void init()    = 0;
-    virtual void cleanup() = 0;
+    virtual void init(Engine& engine) = 0;
+    virtual void cleanup()            = 0;
 
     // Frame-related functions
-    virtual void update(
-        const timing::Clock::duration& delta, entt::registry& reg)
+    virtual void processEvent(Engine& engine, sf::Event& event) = 0;
+    virtual void processUpdate(Engine& engine,
+                               const timing::Clock::duration& delta,
+                               entt::registry& reg)
         = 0;
-    virtual void draw() = 0;
-    virtual void setPaused(bool paused)
+    virtual void processDraw(Engine& engine) = 0;
+
+    void setPaused(bool paused)
     {
         m_paused = paused;
     }
 
-    // Resize & Input callbacks
-    virtual void windowResized(int width, int height) = 0;
-
-    virtual void inputKey(int key, int scancode, int action, int mods) = 0;
-    virtual void inputMouseButton(int button, int action, int mods)    = 0;
-    virtual void inputMousePos(double xpos, double ypos)               = 0;
-    virtual void inputScroll(float dx, float dy)                       = 0;
+    void changeState(Engine& engine, IGameState* state)
+    {
+        engine.changeState(state);
+    }
 
 protected:
     IGameState() {}

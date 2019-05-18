@@ -2,7 +2,7 @@
 #include <string>
 
 #include "fengine/engine.h"
-//#include "game/gamestates/rstateintro.h"
+#include "game/states/introstate.h"
 
 #include <easylogging++/easylogging++.h>
 
@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 
     game.init(std::string("Frames (build ") + BUILD_VERSION + ")", 1280, 720);
 
-    //game.changeState(RhymsStateIntro::instance());
+    game.changeState(IntroState::instance());
 
     game.start();
 

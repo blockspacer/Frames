@@ -1,6 +1,7 @@
 SOURCES += \
     $$PWD/engine.cpp \
     $$PWD/scheduler.cpp \
+    $$PWD/utils/easing.cpp \
     $$PWD/utils/timing.cpp
 
 HEADERS += \
@@ -10,6 +11,7 @@ HEADERS += \
     $$PWD/ui/graph.h \
     $$PWD/ui/graph.tpp \
     $$PWD/ui/timegraph.h \
+    $$PWD/utils/easing.h \
     $$PWD/utils/string.h \
     $$PWD/utils/timing.h
 

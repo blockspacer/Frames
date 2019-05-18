@@ -30,6 +30,8 @@ public:
     void pushState(IGameState* state);
     void popState();
 
+    sf::RenderTarget* target() { return m_window; }
+
 private:
     void processEvents();
     void processPhysics(timing::Clock::duration delta);

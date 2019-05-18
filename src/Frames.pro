@@ -5,6 +5,8 @@ CONFIG += console c++17
 CONFIG -= app_bundle qt
 
 SOURCES += \
+        game/states/introstate.cpp \
+        game/states/menustate.cpp \
         main.cpp
 
 # Include FEngine
@@ -18,3 +20,7 @@ OBJECTS_DIR = $$DESTDIR/.obj
 MOC_DIR = $$DESTDIR/.moc
 RCC_DIR = $$DESTDIR/.qrc
 UI_DIR = $$DESTDIR/.ui
+
+HEADERS += \
+    game/states/introstate.h \
+    game/states/menustate.h

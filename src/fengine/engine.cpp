@@ -19,7 +19,7 @@ namespace frames {
 void Engine::init(std::string title, unsigned int width, unsigned int height)
 {
     ZoneScoped;
-    LOG(INFO) << "Engine::init";
+    LOG(INFO) << "Engine::init started";
     el::Loggers::reconfigureAllLoggers(el::ConfigurationType::Format, "[%levshort] %msg");
 
     m_window = new sf::RenderWindow(sf::VideoMode(width, height),
@@ -81,7 +81,7 @@ void Engine::changeState(IGameState* state, bool init)
 
     m_states.push_back(state);
     if (init) {
-        state->init();
+        state->init(*this);
     }
 }
 
@@ -95,7 +95,7 @@ void Engine::pushState(IGameState* state)
     }
 
     m_states.push_back(state);
-    state->init();
+    state->init(*this);
 }
 
 void Engine::popState()
@@ -116,7 +116,7 @@ void Engine::popState()
 void Engine::cleanup()
 {
     ZoneScoped;
-    LOG(INFO) << "Engine::cleanup";
+    LOG(INFO) << "Engine::cleanup started";
 
     {
         ZoneScopedN("ImGui::SFML::Shutdown");
@@ -151,6 +151,9 @@ void Engine::processEvents()
     while (m_window->pollEvent(event)) {
         ImGui::SFML::ProcessEvent(event);
 
+        if (!m_states.empty())
+            m_states.back()->processEvent(*this, event);
+
         if (event.type == sf::Event::Closed)
             quit();
         if (event.type == sf::Event::LostFocus) {
@@ -168,9 +171,20 @@ void Engine::processPhysics(timing::Clock::duration delta)
 {
     ZoneScoped;
 
+    const double dt = timing::dsec(delta).count();
+    //const auto dt   = std::chrono::duration_cast<timing::dsec>(delta).count();
+
+    ImGui::SFML::Update(*m_window, dt);
+
     if (!m_states.empty()) {
-        m_states.back()->update(delta, m_registry);
+        m_states.back()->processUpdate(*this, delta, m_registry);
     }
+
+    m_frametime->render();
+
+    ImGui::ShowStyleEditor();
+
+    ImGui::EndFrame();
 }
 
 void Engine::processRender(timing::Clock::duration delta)
@@ -180,23 +194,10 @@ void Engine::processRender(timing::Clock::duration delta)
     const auto dt = std::chrono::duration_cast<timing::dsec>(delta).count();
     m_frametime->update(delta);
 
-    m_window->clear();
-
-    ImGui::SFML::Update(*m_window, dt);
-
     if (!m_states.empty()) {
         ZoneScopedN("State rendering");
-        m_states.back()->draw();
+        m_states.back()->processDraw(*this);
     }
-
-    ImGui::Begin("Hello world!");
-    ImGui::End();
-
-    m_frametime->render();
-
-    ImGui::ShowStyleEditor();
-
-    ImGui::EndFrame();
 
     ImGui::SFML::Render(*m_window);
 
