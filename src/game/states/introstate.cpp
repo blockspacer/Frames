@@ -1,7 +1,7 @@
 #include <easylogging++/easylogging++.h>
 
+#include "gamestate.h"
 #include "introstate.h"
-#include "menustate.h"
 
 #include <fengine/utils/easing.h>
 
@@ -10,29 +10,29 @@ using namespace frames::timing;
 
 IntroState IntroState::m_state;
 
-void IntroState::init(Engine& engine)
+void IntroState::init(Engine* engine)
 {
     ZoneScoped;
-    LOG(INFO) << "IntroState::init";
+    IGameState::init(engine);
+
+    LOG(INFO) << "IntroState::init finished";
 }
 
 void IntroState::cleanup()
 {
     ZoneScoped;
+
+    LOG(INFO) << "IntroState::cleanup finished";
 }
 
-void IntroState::processEvent(Engine& engine, sf::Event& event)
+void IntroState::processEvent(entt::registry& reg, sf::Event& event)
 {
     ZoneScoped;
+
     if (event.type == sf::Event::KeyPressed) {
         switch (event.key.code) {
         case sf::Keyboard::K:
             m_easingTime = 0.f;
-            break;
-        case sf::Keyboard::P:
-            setPaused(!m_paused);
-            break;
-        case sf::Keyboard::Tab:
             break;
         default:
             break;
@@ -40,11 +40,10 @@ void IntroState::processEvent(Engine& engine, sf::Event& event)
     }
 
     if (m_easingTime == m_easingTotal)
-        engine.changeState(MenuState::instance());
+        m_engine->changeState(GameState::instance());
 }
 
-void IntroState::processUpdate(Engine& engine, const Clock::duration& delta,
-                               entt::registry& reg)
+void IntroState::processUpdate(entt::registry& reg, const double dt)
 {
     ZoneScoped;
 
@@ -76,17 +75,16 @@ void IntroState::processUpdate(Engine& engine, const Clock::duration& delta,
     ImGui::End();
 
     if (m_easingTime < m_easingTotal)
-        m_easingTime += std::chrono::duration_cast<dsec>(delta).count();
+        m_easingTime += dt;
     else if (m_easingTime > m_easingTotal)
         m_easingTime = m_easingTotal;
 
     m_bgGreyScale = 255 * easing::ease(m_easingType, 1. - m_easingTime / m_easingTotal);
 }
 
-void IntroState::processDraw(Engine& engine)
+void IntroState::processDraw(entt::registry& reg, sf::RenderTarget& target)
 {
     ZoneScoped;
-    const auto target = engine.target();
 
-    target->clear(sf::Color(m_bgGreyScale, m_bgGreyScale, m_bgGreyScale));
+    target.clear(sf::Color(m_bgGreyScale, m_bgGreyScale, m_bgGreyScale));
 }

@@ -1,10 +1,10 @@
-#ifndef INTROSTATE_H
-#define INTROSTATE_H
+#ifndef GAMESTATE_H
+#define GAMESTATE_H
 
 #include <fengine/igamestate.h>
 #include <fengine/utils/easing.h>
 
-class IntroState : public frames::IGameState {
+class GameState : public frames::IGameState {
 public:
     void init(frames::Engine* engine);
     void cleanup();
@@ -13,18 +13,14 @@ public:
     void processUpdate(entt::registry& reg, const double dt);
     void processDraw(entt::registry& reg, sf::RenderTarget& target);
 
-    static IntroState* instance()
+    static GameState* instance()
     {
         return &m_state;
     }
 
 private:
-    IntroState() {}
-    static IntroState m_state;
-
-    int m_bgGreyScale  = 0;
-    float m_easingTime = 0.f, m_easingTotal = 1.5f;
-    frames::easing::EasingFunction m_easingType;
+    GameState() {}
+    static GameState m_state;
 };
 
-#endif // INTROSTATE_H
+#endif // GAMESTATE_H

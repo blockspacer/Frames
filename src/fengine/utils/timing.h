@@ -5,6 +5,7 @@
 
 #include <chrono>
 #include <functional>
+#include <thread>
 
 #define SCOPED_MEASURE(cb) frames::timing::ScopedMeasure timer__COUNTER__(cb)
 
@@ -95,6 +96,12 @@ namespace timing {
          * @return True if it needs to be updated
          */
         bool update();
+
+        /**
+         * @brief Returns the next update time
+         * @return The next update time
+         */
+        Clock::duration next();
 
         /**
          * @brief Returns the time between the last two updates

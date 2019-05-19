@@ -19,7 +19,7 @@ namespace frames {
 void Engine::init(std::string title, unsigned int width, unsigned int height)
 {
     ZoneScoped;
-    LOG(INFO) << "Engine::init started";
+
     el::Loggers::reconfigureAllLoggers(el::ConfigurationType::Format, "[%levshort] %msg");
 
     m_window = new sf::RenderWindow(sf::VideoMode(width, height),
@@ -69,20 +69,13 @@ bool Engine::running()
     return m_running;
 }
 
-void Engine::changeState(IGameState* state, bool init)
+void Engine::changeState(IGameState* state)
 {
     ZoneScoped;
     LOG(INFO) << "Engine::changeState";
 
-    if (!m_states.empty()) {
-        m_states.back()->cleanup();
-        m_states.pop_back();
-    }
-
-    m_states.push_back(state);
-    if (init) {
-        state->init(*this);
-    }
+    popState();
+    pushState(state);
 }
 
 void Engine::pushState(IGameState* state)
@@ -90,12 +83,8 @@ void Engine::pushState(IGameState* state)
     ZoneScoped;
     LOG(INFO) << "Engine::pushState";
 
-    if (!m_states.empty()) {
-        m_states.back()->setPaused(true);
-    }
-
     m_states.push_back(state);
-    state->init(*this);
+    state->init(this);
 }
 
 void Engine::popState()
@@ -107,16 +96,11 @@ void Engine::popState()
         m_states.back()->cleanup();
         m_states.pop_back();
     }
-
-    if (!m_states.empty()) {
-        m_states.back()->setPaused(false);
-    }
 }
 
 void Engine::cleanup()
 {
     ZoneScoped;
-    LOG(INFO) << "Engine::cleanup started";
 
     {
         ZoneScopedN("ImGui::SFML::Shutdown");
@@ -152,7 +136,7 @@ void Engine::processEvents()
         ImGui::SFML::ProcessEvent(event);
 
         if (!m_states.empty())
-            m_states.back()->processEvent(*this, event);
+            m_states.back()->processEvent(m_registry, event);
 
         if (event.type == sf::Event::Closed)
             quit();
@@ -177,7 +161,7 @@ void Engine::processPhysics(timing::Clock::duration delta)
     ImGui::SFML::Update(*m_window, dt);
 
     if (!m_states.empty()) {
-        m_states.back()->processUpdate(*this, delta, m_registry);
+        m_states.back()->processUpdate(m_registry, dt);
     }
 
     m_frametime->render();
@@ -196,7 +180,7 @@ void Engine::processRender(timing::Clock::duration delta)
 
     if (!m_states.empty()) {
         ZoneScopedN("State rendering");
-        m_states.back()->processDraw(*this);
+        m_states.back()->processDraw(m_registry, *m_window);
     }
 
     ImGui::SFML::Render(*m_window);

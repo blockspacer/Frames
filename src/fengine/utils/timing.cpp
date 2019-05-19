@@ -16,7 +16,6 @@
 namespace frames {
 
 namespace timing {
-
 #ifdef HAVE_RDTSCP
     double Clock::multiplier = 1.0;
 
@@ -43,6 +42,7 @@ namespace timing {
     void Clock::calibrate()
     {
 #ifdef HAVE_RDTSCP
+        // Calibrate for real time
         LOG(DEBUG) << "Calibrating clock";
         const auto t0 = std::chrono::high_resolution_clock::now();
         const auto r0 = readTSCp();
@@ -95,6 +95,11 @@ namespace timing {
         }
 
         return false;
+    }
+
+    Clock::duration Ticker::next()
+    {
+        return m_timestep - m_accumulator;
     }
 
     Clock::duration Ticker::getDelta()

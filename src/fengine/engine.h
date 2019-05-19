@@ -26,7 +26,7 @@ public:
     void update();
     bool running();
 
-    void changeState(IGameState* state, bool init = true);
+    void changeState(IGameState* state);
     void pushState(IGameState* state);
     void popState();
 
