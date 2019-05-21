@@ -83,12 +83,10 @@ namespace timing {
 
         m_accumulator = timeNow - m_lastUpdate;
 
-        // Update if enough time has passed since lastUpdate;
+        // Update if enough time has passed since lastUpdate
         if (m_accumulator >= m_timestep) {
             m_frametime   = m_accumulator;
             m_accumulator = Clock::duration::zero();
-            //while (m_accumulator >= m_timestep)
-            //    m_accumulator -= m_timestep;
 
             m_lastUpdate = timeNow;
             return true;
