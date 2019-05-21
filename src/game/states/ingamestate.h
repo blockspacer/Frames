@@ -1,10 +1,9 @@
-#ifndef GAMESTATE_H
-#define GAMESTATE_H
+#ifndef INGAMESTATE_H
+#define INGAMESTATE_H
 
 #include <fengine/igamestate.h>
-#include <fengine/utils/easing.h>
 
-class GameState : public frames::IGameState {
+class IngameState : public frames::IGameState {
 public:
     void init(frames::Engine* engine);
     void cleanup();
@@ -13,14 +12,14 @@ public:
     void processUpdate(entt::registry& reg, const double dt);
     void processDraw(entt::registry& reg, sf::RenderTarget& target);
 
-    static GameState* instance()
+    static IngameState* instance()
     {
         return &m_state;
     }
 
 private:
-    GameState() {}
-    static GameState m_state;
+    IngameState() {}
+    static IngameState m_state;
 };
 
-#endif // GAMESTATE_H
+#endif // INGAMESTATE_H

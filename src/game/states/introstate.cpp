@@ -1,6 +1,6 @@
 #include <easylogging++/easylogging++.h>
 
-#include "gamestate.h"
+#include "ingamestate.h"
 #include "introstate.h"
 
 #include <fengine/utils/easing.h>
@@ -40,7 +40,7 @@ void IntroState::processEvent(entt::registry& reg, sf::Event& event)
     }
 
     if (m_easingTime == m_easingTotal)
-        m_engine->changeState(GameState::instance());
+        m_engine->changeState(IngameState::instance());
 }
 
 void IntroState::processUpdate(entt::registry& reg, const double dt)

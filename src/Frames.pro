@@ -5,7 +5,7 @@ CONFIG += console c++17
 CONFIG -= app_bundle qt
 
 SOURCES += \
-        game/states/gamestate.cpp \
+        game/states/ingamestate.cpp \
         game/states/introstate.cpp \
         main.cpp
 
@@ -22,5 +22,5 @@ RCC_DIR = $$DESTDIR/.qrc
 UI_DIR = $$DESTDIR/.ui
 
 HEADERS += \
-    game/states/gamestate.h \
+    game/states/ingamestate.h \
     game/states/introstate.h

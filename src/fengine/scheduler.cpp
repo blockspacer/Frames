@@ -45,7 +45,7 @@ void Scheduler::update()
         timeToWait = std::min(timeToWait, ticker.next());
     }
 
-    if (timeToWait > std::chrono::milliseconds(2))
+    if (timeToWait > std::chrono::milliseconds(3))
         std::this_thread::sleep_for(timeToWait - std::chrono::milliseconds(3));
 }
 
