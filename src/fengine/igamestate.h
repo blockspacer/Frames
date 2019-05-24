@@ -5,7 +5,17 @@
 #include <entt/entt.hpp>
 
 #include "engine.h"
-#include "utils/timing.h"
+
+// Macro to make a class into a singleton
+#define DECLARE_SINGLETON(name)                  \
+public:                                          \
+    static name* instance() { return &m_state; } \
+                                                 \
+private:                                         \
+    name() {}                                    \
+    static name m_state;
+
+#define DEFINE_SINGLETON(name) name name::m_state;
 
 namespace frames {
 

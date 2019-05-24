@@ -12,14 +12,11 @@ public:
     void processUpdate(entt::registry& reg, const double dt);
     void processDraw(entt::registry& reg, sf::RenderTarget& target);
 
-    static IngameState* instance()
-    {
-        return &m_state;
-    }
-
 private:
-    IngameState() {}
-    static IngameState m_state;
+    TilemapSystem m_tilemap;
+
+    /// Singleton
+    DECLARE_SINGLETON(IngameState)
 };
 
 #endif // INGAMESTATE_H

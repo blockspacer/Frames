@@ -4,9 +4,9 @@
 
 using namespace frames;
 
-IngameState IngameState::m_state;
+DEFINE_SINGLETON(IngameState)
 
-void IngameState::init(Engine *engine)
+void IngameState::init(Engine* engine)
 {
     ZoneScoped;
     IGameState::init(engine);

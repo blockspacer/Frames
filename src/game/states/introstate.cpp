@@ -8,7 +8,7 @@
 using namespace frames;
 using namespace frames::timing;
 
-IntroState IntroState::m_state;
+DEFINE_SINGLETON(IntroState)
 
 void IntroState::init(Engine* engine)
 {
