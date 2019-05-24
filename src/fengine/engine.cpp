@@ -98,6 +98,25 @@ void Engine::popState()
     }
 }
 
+void Engine::snap(unsigned int width, unsigned int height)
+{
+    constexpr auto findMultiple = [](int value, int multiple) -> int {
+        return ((value + multiple / 2) / multiple);
+    };
+
+    const unsigned int multiplier = findMultiple(width, m_snapSize.x);
+
+    m_window->setSize(multiplier * m_snapSize);
+
+    sf::View view = m_window->getDefaultView();
+    view.reset(sf::FloatRect(sf::Vector2f(0, 0), sf::Vector2f(m_snapSize)));
+    //view.move(sf::Vector2f(m_snapSize) / 2.f);
+    //view.zoom(multiplier);
+    m_window->setView(view);
+
+    m_justsnapped = true;
+}
+
 void Engine::cleanup()
 {
     ZoneScoped;
@@ -127,11 +146,12 @@ void Engine::cleanup()
     LOG(INFO) << "Engine::cleanup finished";
 }
 
-void Engine::snap(unsigned int widthsnap, unsigned int heightsnap)
+void Engine::setAutoSnap(unsigned int width, unsigned int height)
 {
-    m_widthsnap  = widthsnap;
-    m_heightsnap = heightsnap;
-    m_snapping   = true;
+    m_snapSize = sf::Vector2u(width, height);
+    m_snapping = true;
+
+    snap(m_window->getSize().x, m_window->getSize().y);
 
     LOG(INFO) << "Engine::snap enabled";
 }
@@ -148,27 +168,19 @@ void Engine::processEvents()
             m_states.back()->processEvent(m_registry, event);
 
         if (event.type == sf::Event::Resized) {
-            constexpr auto findMultiple = [](int value, int multiple) -> int {
-                return ((value + multiple / 2) / multiple);
-            };
-
-            const auto widthMult  = findMultiple(event.size.width,
-                                                m_widthsnap);
-            const auto heightMult = findMultiple(event.size.height,
-                                                 m_heightsnap);
-
-            unsigned int multiplier = (widthMult + heightMult) / 2;
-
-            LOG(INFO) << "multiplier: " << multiplier;
-
-            m_window->setSize(multiplier * sf::Vector2u(m_widthsnap, m_heightsnap));
+            if (m_snapping) {
+                if (m_justsnapped)
+                    m_justsnapped = false;
+                else
+                    snap(event.size.width, event.size.height);
+            }
         }
         if (event.type == sf::Event::Closed)
             quit();
         if (event.type == sf::Event::LostFocus) {
         }
         if (event.type == sf::Event::Resized) {
-            m_window->setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+            //m_window->setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
         }
         if (event.type == sf::Event::KeyPressed)
             if (event.key.code == sf::Keyboard::Escape)

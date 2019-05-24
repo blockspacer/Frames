@@ -7,6 +7,7 @@ CONFIG -= app_bundle qt
 SOURCES += \
         game/states/ingamestate.cpp \
         game/states/introstate.cpp \
+        game/systems/tilemapsystem.cpp \
         main.cpp
 
 # Include FEngine
@@ -23,4 +24,5 @@ UI_DIR = $$DESTDIR/.ui
 
 HEADERS += \
     game/states/ingamestate.h \
-    game/states/introstate.h
+    game/states/introstate.h \
+    game/systems/tilemapsystem.h

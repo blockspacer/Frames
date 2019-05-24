@@ -15,7 +15,7 @@ public:
 
 private:
     int m_bgGreyScale  = 0;
-    float m_easingTime = 0.f, m_easingTotal = 1.5f;
+    float m_easingTime = 0.f, m_easingTotal = 0.4f;
     frames::easing::EasingFunction m_easingType;
 
     DECLARE_SINGLETON(IntroState)

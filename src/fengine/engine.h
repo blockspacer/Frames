@@ -20,7 +20,7 @@ public:
     void init(std::string title, unsigned int width = 1280, unsigned int height = 720);
     void cleanup();
 
-    void snap(unsigned int widthsnap, unsigned int heightsnap);
+    void setAutoSnap(unsigned int width, unsigned int height);
     void start();
     void quit();
 
@@ -34,6 +34,8 @@ public:
     sf::RenderTarget* target() { return m_window; }
 
 private:
+    void snap(unsigned int width, unsigned int height);
+
     void processEvents();
     void processPhysics(timing::Clock::duration delta);
     void processRender(timing::Clock::duration delta);
@@ -47,8 +49,8 @@ private:
 
     ui::TimeGraph<200>* m_frametime;
 
-    bool m_snapping = false;
-    unsigned int m_widthsnap, m_heightsnap;
+    bool m_snapping = false, m_justsnapped = false;
+    sf::Vector2u m_snapSize;
     bool m_running = false;
 };
 

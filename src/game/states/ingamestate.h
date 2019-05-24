@@ -3,6 +3,8 @@
 
 #include <fengine/igamestate.h>
 
+#include "../systems/tilemapsystem.h"
+
 class IngameState : public frames::IGameState {
 public:
     void init(frames::Engine* engine);
@@ -13,7 +15,7 @@ public:
     void processDraw(entt::registry& reg, sf::RenderTarget& target);
 
 private:
-    TilemapSystem m_tilemap;
+    TilemapSystem m_mapFG, m_mapBG;
 
     /// Singleton
     DECLARE_SINGLETON(IngameState)

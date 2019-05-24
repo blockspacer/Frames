@@ -1,5 +1,6 @@
 SOURCES += \
     $$PWD/engine.cpp \
+    $$PWD/resources/textureloader.cpp \
     $$PWD/scheduler.cpp \
     $$PWD/utils/easing.cpp \
     $$PWD/utils/timing.cpp
@@ -7,6 +8,8 @@ SOURCES += \
 HEADERS += \
     $$PWD/engine.h \
     $$PWD/igamestate.h \
+    $$PWD/isystem.h \
+    $$PWD/resources/textureloader.h \
     $$PWD/scheduler.h \
     $$PWD/ui/graph.h \
     $$PWD/ui/graph.tpp \
