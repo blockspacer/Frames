@@ -20,6 +20,7 @@ public:
     void init(std::string title, unsigned int width = 1280, unsigned int height = 720);
     void cleanup();
 
+    void snap(unsigned int widthsnap, unsigned int heightsnap);
     void start();
     void quit();
 
@@ -46,6 +47,8 @@ private:
 
     ui::TimeGraph<200>* m_frametime;
 
+    bool m_snapping = false;
+    unsigned int m_widthsnap, m_heightsnap;
     bool m_running = false;
 };
 

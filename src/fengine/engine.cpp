@@ -127,6 +127,15 @@ void Engine::cleanup()
     LOG(INFO) << "Engine::cleanup finished";
 }
 
+void Engine::snap(unsigned int widthsnap, unsigned int heightsnap)
+{
+    m_widthsnap  = widthsnap;
+    m_heightsnap = heightsnap;
+    m_snapping   = true;
+
+    LOG(INFO) << "Engine::snap enabled";
+}
+
 void Engine::processEvents()
 {
     ZoneScoped;
@@ -138,6 +147,22 @@ void Engine::processEvents()
         if (!m_states.empty())
             m_states.back()->processEvent(m_registry, event);
 
+        if (event.type == sf::Event::Resized) {
+            constexpr auto findMultiple = [](int value, int multiple) -> int {
+                return ((value + multiple / 2) / multiple);
+            };
+
+            const auto widthMult  = findMultiple(event.size.width,
+                                                m_widthsnap);
+            const auto heightMult = findMultiple(event.size.height,
+                                                 m_heightsnap);
+
+            unsigned int multiplier = (widthMult + heightMult) / 2;
+
+            LOG(INFO) << "multiplier: " << multiplier;
+
+            m_window->setSize(multiplier * sf::Vector2u(m_widthsnap, m_heightsnap));
+        }
         if (event.type == sf::Event::Closed)
             quit();
         if (event.type == sf::Event::LostFocus) {
