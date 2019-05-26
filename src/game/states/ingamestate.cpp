@@ -4,6 +4,8 @@
 
 using namespace frames;
 
+using TextureCache = entt::resource_cache<sf::Texture>;
+
 DEFINE_SINGLETON(IngameState)
 
 void IngameState::init(Engine* engine)

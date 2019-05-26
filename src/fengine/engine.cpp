@@ -38,6 +38,9 @@ void Engine::init(std::string title, unsigned int width, unsigned int height)
     // Calibrate clock (if needed)
     timing::Clock::calibrate();
 
+    // Initialize pointers
+    m_textureCache.reset(new entt::resource_cache<sf::Texture>);
+
     m_running = false;
 
     LOG(INFO) << "Engine::init finished";
@@ -100,6 +103,8 @@ void Engine::popState()
 
 void Engine::snap(unsigned int width, unsigned int height)
 {
+    (void)height;
+
     constexpr auto findMultiple = [](int value, int multiple) -> int {
         return ((value + multiple / 2) / multiple);
     };

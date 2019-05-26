@@ -15,7 +15,12 @@ public:
     void processDraw(entt::registry& reg, sf::RenderTarget& target);
 
 private:
-    TilemapSystem m_mapFG, m_mapBG;
+    void resizeToMap();
+
+private:
+    TilemapSystem m_tilemapSystem;
+
+    TextureCachePtr m_textureCache;
 
     /// Singleton
     DECLARE_SINGLETON(IngameState)
