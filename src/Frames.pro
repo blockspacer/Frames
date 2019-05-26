@@ -23,6 +23,12 @@ RCC_DIR = $$DESTDIR/.qrc
 UI_DIR = $$DESTDIR/.ui
 
 HEADERS += \
+    game/components/movement.h \
+    game/components/position.h \
+    game/components/sprite.h \
+    game/components/tilemap.h \
+    game/components/tilemapproperties.h \
+    game/components/velocity.h \
     game/states/ingamestate.h \
     game/states/introstate.h \
     game/systems/tilemapsystem.h

@@ -113,12 +113,6 @@ void Engine::snap(unsigned int width, unsigned int height)
 
     m_window->setSize(multiplier * m_snapSize);
 
-    sf::View view = m_window->getDefaultView();
-    view.reset(sf::FloatRect(sf::Vector2f(0, 0), sf::Vector2f(m_snapSize)));
-    //view.move(sf::Vector2f(m_snapSize) / 2.f);
-    //view.zoom(multiplier);
-    m_window->setView(view);
-
     m_justsnapped = true;
 }
 
