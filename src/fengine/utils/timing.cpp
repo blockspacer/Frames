@@ -26,17 +26,16 @@ namespace timing {
     }
 #endif
 
-    uint64_t Clock::resolution()
-    {
-        int64_t resolution = std::numeric_limits<int64_t>::max();
-        for (int i = 0; i < 50000 * 10; i++) {
-            const auto t0i = now();
-            const auto t1i = now();
-            const auto dti = (t1i - t0i).count();
-            if (dti > 0 && dti < resolution)
-                resolution = dti;
-        }
-        return resolution;
+    int64_t Clock::resolution() {
+      int64_t resolution = std::numeric_limits<int64_t>::max();
+      for (int i = 0; i < 50000 * 10; i++) {
+        const auto t0i = now();
+        const auto t1i = now();
+        const auto dti = (t1i - t0i).count();
+        if (dti > 0 && dti < resolution)
+          resolution = dti;
+      }
+      return resolution;
     }
 
     void Clock::calibrate()
@@ -64,32 +63,34 @@ namespace timing {
 #endif
     }
 
-    Ticker::Ticker(const unsigned int updateRate)
-    {
-        if (updateRate != 0) {
-            m_instant    = false;
-            m_timestep   = std::chrono::nanoseconds(1000000000 / updateRate);
-            m_lastUpdate = Clock::now();
-        }
+    Ticker::Ticker(const unsigned int updateRate) {
+      setUpdateRate(updateRate);
+    }
+
+    void Ticker::setUpdateRate(unsigned int updateRate) {
+      if (updateRate != 0) {
+        m_instant    = false;
+        m_timestep   = std::chrono::nanoseconds(1000000000 / updateRate);
+        m_lastUpdate = Clock::now();
+      } else {
+        m_instant = true;
+        m_timestep = std::chrono::nanoseconds::zero();
+      }
     }
 
     bool Ticker::update()
     {
-        // Always update
-        if (m_instant)
-            return true;
-
         auto timeNow = Clock::now();
 
         m_accumulator = timeNow - m_lastUpdate;
 
         // Update if enough time has passed since lastUpdate
-        if (m_accumulator >= m_timestep) {
-            m_frametime   = m_accumulator;
-            m_accumulator = Clock::duration::zero();
+        if (m_instant || m_accumulator >= m_timestep) {
+          m_frametime   = m_accumulator;
+          m_accumulator = Clock::duration::zero();
 
-            m_lastUpdate = timeNow;
-            return true;
+          m_lastUpdate = timeNow;
+          return true;
         }
 
         return false;
@@ -97,6 +98,9 @@ namespace timing {
 
     Clock::duration Ticker::next()
     {
+      if (m_instant)
+        return Clock::duration::zero();
+      else
         return m_timestep - m_accumulator;
     }
 

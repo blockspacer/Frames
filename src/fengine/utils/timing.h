@@ -73,7 +73,7 @@ namespace timing {
          * @brief Estimates the clock resolution
          * @return Resolution in ns
          */
-        static uint64_t resolution();
+        static int64_t resolution();
 
         /**
          * @brief Calibrates the clock
@@ -85,29 +85,35 @@ namespace timing {
 
     class Ticker {
     public:
-        /**
-         * @brief Setups a ticker with an update rate in updates/second
-         * @param updateRate The update rate in updates/s
-         */
-        Ticker(const unsigned int updateRate = 0);
+     /**
+      * @brief Setups a ticker with an update rate in updates/second
+      * @param updateRate The update rate in updates/s
+      */
+     Ticker(const unsigned int updateRate = 0);
 
-        /**
-         * @brief Updates the ticker
-         * @return True if it needs to be updated
-         */
-        bool update();
+     /**
+      * @brief Sets the update rate.
+      * @param updateRate The update rate.
+      */
+     void setUpdateRate(unsigned int updateRate = 0);
 
-        /**
-         * @brief Returns the next update time
-         * @return The next update time
-         */
-        Clock::duration next();
+     /**
+      * @brief Updates the ticker
+      * @return True if it needs to be updated
+      */
+     bool update();
 
-        /**
-         * @brief Returns the time between the last two updates
-         * @return The time between the last two updates
-         */
-        Clock::duration getDelta();
+     /**
+      * @brief Returns the next update time
+      * @return The next update time
+      */
+     Clock::duration next();
+
+     /**
+      * @brief Returns the time between the last two updates
+      * @return The time between the last two updates
+      */
+     Clock::duration getDelta();
 
     private:
         bool m_instant = true;

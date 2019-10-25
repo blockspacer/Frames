@@ -23,6 +23,8 @@ public:
     void cleanup();
 
     void setAutoSnap(unsigned int width, unsigned int height);
+    void setFramerateLimit(unsigned int framerate);
+
     void start();
     void quit();
 

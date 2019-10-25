@@ -64,8 +64,8 @@ namespace ui {
                              | ImGuiWindowFlags_NoSavedSettings
                              | ImGuiWindowFlags_NoFocusOnAppearing
                              | ImGuiWindowFlags_NoBringToFrontOnFocus);
-            ImGui::PlotLinesStats<200>(this->m_name, this->m_data,
-                                       0, 40, this->m_avg);
+            ImGui::PlotLinesStats<200>(this->m_name, this->m_data, 0,
+                                       2 * this->m_avg, this->m_avg);
             ImGui::End();
 
             ImGui::PopStyleColor();

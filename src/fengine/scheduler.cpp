@@ -24,6 +24,10 @@ void Scheduler::add(std::function<void(timing::Clock::duration)> task, unsigned 
     m_tickers.emplace_back(updateRate);
 }
 
+void Scheduler::setRate(uint32_t index, unsigned int updateRate) {
+  m_tickers.at(index).setUpdateRate(updateRate);
+}
+
 void Scheduler::update()
 {
     // Update if needed

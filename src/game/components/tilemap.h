@@ -5,9 +5,16 @@
 #include <entt/entt.hpp>
 
 struct Tilemap {
-    bool loaded = false;
-    entt::resource_handle<sf::Texture> tilesetHandle;
-    sf::VertexArray vertices;
+  enum Type { CSV };
+
+  std::string name, path;
+  std::vector<std::pair<std::string, int32_t>> layers;
+  Type type;
+  entt::hashed_string tileset;
+
+  bool loaded = false;
+  sf::Vector2u size;
+  std::vector<std::pair<sf::VertexArray, int32_t>> vertices;
 };
 
 #endif // TILEMAP_H

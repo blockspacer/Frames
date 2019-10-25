@@ -8,7 +8,7 @@
 #include "../components/position.h"
 #include "../components/sprite.h"
 #include "../components/tilemap.h"
-#include "../components/tilemapproperties.h"
+#include "../components/tileset.h"
 #include "../components/velocity.h"
 
 using namespace frames;
@@ -24,30 +24,28 @@ void IngameState::init(Engine* engine)
 
     auto&& registry = engine->getRegistry();
 
+    // Create tileset
+    Tileset tileset;
+    tileset.name      = "Main";
+    tileset.path      = "data/tilesetMain.png";
+    tileset.tileSize  = sf::Vector2u(16, 16);
+    tileset.tilesetId = "textures/tilesetMain"_hs;
+
     // Create tilemaps
-    TilemapProperties properties;
-    properties.tilesetFile = "data/tileset.png";
-    properties.type        = TilemapProperties::CSV;
-    properties.tileSize    = sf::Vector2u(16, 16);
-    properties.tilesetId   = "textures/tileset"_hs;
+    Tilemap tilemap;
+    tilemap.name    = "Gamemap";
+    tilemap.path    = "data/map";
+    tilemap.layers  = {{"Foreground", 0}, {"Background", -1}};
+    tilemap.type    = Tilemap::CSV;
+    tilemap.tileset = "textures/tilesetMain"_hs;
 
-    // Foreground tilemap
-    properties.file  = "data/map_foreground.csv";
-    properties.layer = 0;
-    auto&& mapFG     = registry.create();
-    registry.assign<Tilemap>(mapFG);
-    registry.assign<TilemapProperties>(mapFG, properties);
-    //m_mapFG.init(engine, map);
-
-    // Background tilemap
-    properties.file  = "data/map_background.csv";
-    properties.layer = 1;
-    auto&& mapBG     = registry.create();
-    registry.assign<Tilemap>(mapBG);
-    registry.assign<TilemapProperties>(mapBG, properties);
-    //m_mapBG.init(engine, map);
+    // Append map
+    auto&& map = registry.create();
+    registry.assign<Tileset>(map, tileset);
+    registry.assign<Tilemap>(map, tilemap);
 
     m_tilemapSystem.init(m_engine);
+    m_tilemapEditor.init(m_engine);
 
     resizeToMap();
 
@@ -78,6 +76,7 @@ void IngameState::cleanup()
     ZoneScoped;
 
     m_tilemapSystem.cleanup();
+    m_tilemapEditor.cleanup();
 
     m_textureCache->discard("textures/player/idle1"_hs);
 
@@ -124,6 +123,7 @@ void IngameState::processUpdate(entt::registry& reg, const double dt)
     ZoneScoped;
 
     m_tilemapSystem.processUpdate(reg, dt);
+    m_tilemapEditor.processUpdate(reg, dt);
 
     ImGui::ShowDemoWindow();
 
@@ -200,6 +200,7 @@ void IngameState::processDraw(entt::registry& reg, sf::RenderTarget& target)
     target.clear(sf::Color(135, 206, 235));
 
     m_tilemapSystem.processDraw(reg, target);
+    m_tilemapEditor.processDraw(reg, target);
 
     auto view = reg.view<sf::Sprite>();
     for (const entt::entity e : view) {

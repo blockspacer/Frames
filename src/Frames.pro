@@ -7,6 +7,8 @@ CONFIG -= app_bundle qt
 SOURCES += \
         game/states/ingamestate.cpp \
         game/states/introstate.cpp \
+        game/systems/tilemapeditor.cpp \
+        game/systems/tilemapsimplesystem.cpp \
         game/systems/tilemapsystem.cpp \
         main.cpp
 
@@ -27,8 +29,10 @@ HEADERS += \
     game/components/position.h \
     game/components/sprite.h \
     game/components/tilemap.h \
-    game/components/tilemapproperties.h \
+    game/components/tileset.h \
     game/components/velocity.h \
     game/states/ingamestate.h \
     game/states/introstate.h \
+    game/systems/tilemapeditor.hpp \
+    game/systems/tilemapsimplesystem.hpp \
     game/systems/tilemapsystem.h

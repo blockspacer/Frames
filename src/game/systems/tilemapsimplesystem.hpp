@@ -1,11 +1,11 @@
-#ifndef TILEMAPSYSTEM_H
-#define TILEMAPSYSTEM_H
+#ifndef TILEMAPSIMPLESYSTEM_HPP
+#define TILEMAPSIMPLESYSTEM_HPP
 
 #include <fengine/isystem.h>
 #include "../components/tilemap.h"
 #include "../components/tileset.h"
 
-class TilemapSystem : public frames::ISystem {
+class TilemapSimpleSystem : public frames::ISystem {
  public:
   void init(frames::Engine* engine) override;
   void cleanup() override;
@@ -36,4 +36,4 @@ class TilemapSystem : public frames::ISystem {
   TextureCachePtr m_textureCache;
 };
 
-#endif // TILEMAPSYSTEM_H
+#endif // TILEMAPSIMPLESYSTEM_HPP

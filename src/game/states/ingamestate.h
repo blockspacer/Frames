@@ -3,6 +3,7 @@
 
 #include <fengine/igamestate.h>
 
+#include "../systems/tilemapeditor.hpp"
 #include "../systems/tilemapsystem.h"
 
 class IngameState : public frames::IGameState {
@@ -19,6 +20,7 @@ private:
 
 private:
     TilemapSystem m_tilemapSystem;
+    TilemapEditor m_tilemapEditor;
 
     TextureCachePtr m_textureCache;
 

@@ -21,7 +21,9 @@ namespace ui {
         void update(const timing::Clock::duration& time)
         {
             ZoneScoped;
-            const double timems = std::chrono::duration_cast<timing::dmilli>(time).count();
+            const double timems =
+                std::chrono::duration_cast<timing::dmilli>(time).count();
+            // const double timems = timing::dmilli(time).count();
 
             // Append the new value to the end
             Graph<200>::push(timems);

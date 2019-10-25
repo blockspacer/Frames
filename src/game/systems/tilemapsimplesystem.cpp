@@ -1,4 +1,4 @@
-#include "tilemapsystem.h"
+#include "tilemapsimplesystem.hpp"
 
 #include <easylogging++/easylogging++.h>
 #include <fstream>
@@ -8,7 +8,7 @@
 using namespace frames;
 using TextureCache = entt::resource_cache<sf::Texture>;
 
-void TilemapSystem::init(Engine* engine) {
+void TilemapSimpleSystem::init(Engine* engine) {
   ZoneScoped;
   ISystem::init(engine);
 
@@ -16,10 +16,10 @@ void TilemapSystem::init(Engine* engine) {
 
   load(engine->getRegistry());
 
-  LOG(INFO) << "TilemapSystem::init finished";
+  LOG(INFO) << "TilemapSimpleSystem::init finished";
 }
 
-void TilemapSystem::load(entt::registry& reg) const {
+void TilemapSimpleSystem::load(entt::registry& reg) const {
   auto maps = reg.view<Tilemap, Tileset>();
 
   for (auto e : maps) {
@@ -39,17 +39,18 @@ void TilemapSystem::load(entt::registry& reg) const {
   }
 }
 
-void TilemapSystem::cleanup() {
+void TilemapSimpleSystem::cleanup() {
   ZoneScoped;
 
-  LOG(INFO) << "TilemapSystem::cleanup finished";
+  LOG(INFO) << "TilemapSimpleSystem::cleanup finished";
 }
 
-void TilemapSystem::processUpdate(entt::registry& reg, const double dt) {
+void TilemapSimpleSystem::processUpdate(entt::registry& reg, const double dt) {
   ZoneScoped;
 }
 
-void TilemapSystem::processDraw(entt::registry& reg, sf::RenderTarget& target) {
+void TilemapSimpleSystem::processDraw(entt::registry& reg,
+                                      sf::RenderTarget& target) {
   ZoneScoped;
 
   sf::RenderStates states;
@@ -70,7 +71,7 @@ void TilemapSystem::processDraw(entt::registry& reg, sf::RenderTarget& target) {
   }
 }
 
-bool TilemapSystem::loadTileset(Tileset& set) const {
+bool TilemapSimpleSystem::loadTileset(Tileset& set) const {
   ZoneScoped;
 
   // (Re)Loads the tileset
@@ -81,7 +82,7 @@ bool TilemapSystem::loadTileset(Tileset& set) const {
   set.tilesetSize.y = set.handle->getSize().y / set.tileSize.y;
 
   if (set.tilesetSize.x == 0 || set.tilesetSize.y == 0) {
-    LOG(ERROR) << "TilemapSystem::loadMap error: "
+    LOG(ERROR) << "TilemapSimpleSystem::loadMap error: "
                << "Cannot determine tileset size.";
     return false;
   }
@@ -90,7 +91,7 @@ bool TilemapSystem::loadTileset(Tileset& set) const {
 }
 
 /*!
- * \brief TilemapSystem::loadMap
+ * \brief TilemapSimpleSystem::loadMap
  *
  * Loading a map consists of a few steps:
  *  1. For each layer
@@ -100,7 +101,7 @@ bool TilemapSystem::loadTileset(Tileset& set) const {
  * \param map
  * \param set
  */
-void TilemapSystem::loadMap(Tilemap& map, Tileset& set) const {
+void TilemapSimpleSystem::loadMap(Tilemap& map, Tileset& set) const {
   ZoneScoped;
 
   /// Converts a map type to an extension
@@ -133,8 +134,9 @@ void TilemapSystem::loadMap(Tilemap& map, Tileset& set) const {
     sf::Vector2u size;
 
     if (!infile.is_open()) {
-      LOG(ERROR) << "TilemapSystem::loadMap error: Cannot open map layer file "
-                 << layerFile << ".";
+      LOG(ERROR)
+          << "TilemapSimpleSystem::loadMap error: Cannot open map layer file "
+          << layerFile << ".";
       continue;
     }
 
@@ -209,102 +211,3 @@ void TilemapSystem::loadMap(Tilemap& map, Tileset& set) const {
   std::sort(map.vertices.begin(), map.vertices.end(),
             [](auto& left, auto& right) { return left.second < right.second; });
 }
-
-/*
-std::vector<int32_t> TilemapSystem::openMap(Tilemap& map, Tileset& set) {
-  ZoneScoped;
-
-auto typeToExtension = [](auto type) -> std::string {
-  switch (type) {
-    case Tilemap::CSV:
-      return ".csv";
-  }
-  return "";
-};
-
-for (auto&& layer : map.layers) {
-  std::string layerfile = map.path + layer.first + typeToExtension(map.type);
-  std::ifstream infile(layerfile);
-
-  std::vector<int32_t> mapData;
-  sf::Vector2u size;
-
-  if (!infile.is_open()) {
-    LOG(ERROR) << "TilemapSystem::openMap error: Cannot open map layer file "
-               << layerfile;
-    return mapData;
-  }
-
-  if (map.type == Tilemap::CSV) {
-    std::string line;
-    unsigned int rows = 0;
-    unsigned int cols = 0;
-
-    // For each row
-    while (std::getline(infile, line)) {
-      rows++;
-      std::istringstream s(line);
-      std::string field;
-      // For each column
-      while (getline(s, field, ',')) {
-        cols++;
-        mapData.push_back(std::stoi(field));
-      }
-    }
-    map.size.x = cols / rows;
-    map.size.y = rows;
-  }
-}
-
-
-}
-
-void TilemapSystem::decodeMap(Tilemap& map,
-                              Tileset& properties,
-                              std::vector<int32_t> data) {
-  const unsigned int& width  = properties.size.x;
-  const unsigned int& height = properties.size.y;
-
-  const unsigned int& tileWidth  = properties.tileSize.x;
-  const unsigned int& tileHeight = properties.tileSize.y;
-
-  const unsigned int& tilesetCols = properties.tilesetSize.x;
-
-  map.vertices.setPrimitiveType(sf::Quads);
-  map.vertices.resize(width * height * 4);
-
-  // Reads the tile map from left to right then from top to bottom
-  for (unsigned int iCol = 0; iCol < width; iCol++)
-    for (unsigned int iRow = 0; iRow < height; iRow++) {
-      // Get the tile ID
-      unsigned int tileId = data[iCol + iRow * width];
-
-      // Find the tile ID in the tileset
-      unsigned int tilesetCol = 0;
-      unsigned int tilesetRow = 0;
-      if (tileId != -1) {
-        tilesetCol = tileId % tilesetCols;
-        tilesetRow = tileId / tilesetCols;
-      }
-
-      // Modifiable reference
-      auto&& quad = &map.vertices[(iCol + iRow * width) * 4];
-
-      // Set the 4 corner's positions
-      quad[0].position = sf::Vector2f(iCol, iRow);
-      quad[1].position = sf::Vector2f((iCol + 1), iRow);
-      quad[2].position = sf::Vector2f((iCol + 1), (iRow + 1));
-      quad[3].position = sf::Vector2f(iCol, (iRow + 1));
-
-      // Set the 4 corner's texture coordinates
-      quad[0].texCoords =
-          sf::Vector2f(tilesetCol * tileWidth, tilesetRow * tileHeight);
-      quad[1].texCoords =
-          sf::Vector2f((tilesetCol + 1) * tileWidth, tilesetRow * tileHeight);
-      quad[2].texCoords = sf::Vector2f((tilesetCol + 1) * tileWidth,
-                                       (tilesetRow + 1) * tileHeight);
-      quad[3].texCoords =
-          sf::Vector2f(tilesetCol * tileWidth, (tilesetRow + 1) * tileHeight);
-    }
-}
-*/

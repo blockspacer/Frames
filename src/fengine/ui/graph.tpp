@@ -93,9 +93,9 @@ void PlotLinesStats(const std::string& label,
 
     // Average
     if (avg != std::numeric_limits<double>::max()) {
-        std::string text = "avg: " + frames::to_string_wp(avg, 2);
-        RenderTextClipped(frame_bb.Min, frame_bb.Max, text.c_str(),
-                          nullptr, nullptr, ImVec2(0.f, 1.f / 3.f));
+      std::string text = "avg: " + frames::to_string_wp(avg, 10);
+      RenderTextClipped(frame_bb.Min, frame_bb.Max, text.c_str(), nullptr,
+                        nullptr, ImVec2(0.f, 1.f / 3.f));
     }
 }
 
